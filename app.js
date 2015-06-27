@@ -32,17 +32,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Create our Express router
 var router = express.Router();
 
-var AppointmentController = require('./controllers/appointment');
+var appointmentController = require('./controllers/appointment');
+var userController = require('./controllers/user');
+
 // Create endpoint handlers for /appointments
 router.route('/appointments')
-    .post(AppointmentController.postAppointments)
-    .get(AppointmentController.getAppointments);
+    .post(appointmentController.postAppointments)
+    .get(appointmentController.getAppointments);
 
 // Create endpoint handlers for /appointments/:id
 router.route('/appointments/:id')
-    .get(AppointmentController.getAppointment)
-    .put(AppointmentController.putAppointment)
-    .delete(AppointmentController.deleteAppointment);
+    .get(appointmentController.getAppointment)
+    .put(appointmentController.putAppointment)
+    .delete(appointmentController.deleteAppointment);
+
+// Create endpoint handlers for /users
+router.route('/users')
+    .post(userController.postUsers)
+    .get(userController.getUsers);
+
 
 app.use('/api', router);
 
