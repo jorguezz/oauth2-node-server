@@ -5,10 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var session = require('express-session');
 
 mongoose.connect('mongodb://localhost:27017/dbmyapp');
-
-
 
 var app = express();
 
@@ -25,36 +25,55 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// Use the passport package in our application
 
+// Use express session support since OAuth2orize requires it
+app.use(session({
+    secret: 'my-secret-key',
+    saveUninitialized: true,
+    resave: true
+}));
 
+app.use(passport.initialize());
 
 
 // Create our Express router
 var router = express.Router();
 
+var authController = require('./controllers/auth');
 var appointmentController = require('./controllers/appointment');
 var userController = require('./controllers/user');
+var clientController = require('./controllers/client');
+var oauth2Controller = require('./controllers/oauth2');
 
-// Create endpoint handlers for /appointments
 router.route('/appointments')
-    .post(appointmentController.postAppointments)
-    .get(appointmentController.getAppointments);
+    .post(authController.isAuthenticated, appointmentController.postAppointments)
+    .get(authController.isAuthenticated, appointmentController.getAppointments);
 
-// Create endpoint handlers for /appointments/:id
 router.route('/appointments/:id')
-    .get(appointmentController.getAppointment)
-    .put(appointmentController.putAppointment)
-    .delete(appointmentController.deleteAppointment);
+    .get(authController.isAuthenticated, appointmentController.getAppointment)
+    .put(authController.isAuthenticated, appointmentController.putAppointment)
+    .delete(authController.isAuthenticated, appointmentController.deleteAppointment);
 
-// Create endpoint handlers for /users
 router.route('/users')
     .post(userController.postUsers)
-    .get(userController.getUsers);
+    .get(authController.isAuthenticated, userController.getUsers);
+
+router.route('/clients')
+    .post(authController.isAuthenticated, clientController.postClients)
+    .get(authController.isAuthenticated, clientController.getClients);
+
+// Create endpoint handlers for oauth2 authorize
+router.route('/oauth2/authorize')
+    .get(authController.isAuthenticated, oauth2Controller.authorization)
+    .post(authController.isAuthenticated, oauth2Controller.decision);
+
+// Create endpoint handlers for oauth2 token
+router.route('/oauth2/token')
+    .post(authController.isClientAuthenticated, oauth2Controller.token);
 
 
 app.use('/api', router);
-
-
 
 
 // catch 404 and forward to error handler

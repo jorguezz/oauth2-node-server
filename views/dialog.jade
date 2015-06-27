@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  p Hi #{user.username}
+  p #{client.name} is requesting full access to your account
+  p Do you approve?
+
+  form(action='/api/oauth2/authorize', method='post')
+    input(name='transaction_id', type='hidden', value='#{transactionID}')
+    |       
+    div
+      input#allow(type='submit', value='Allow')
+      |       
+      input#deny(type='submit', value='Deny', name='cancel')

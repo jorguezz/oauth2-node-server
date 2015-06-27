@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 // Define our appointment schema
 var AppointmentSchema = new mongoose.Schema({
+    userId: String,
     title: String,
     start: Date,
     end: Date,

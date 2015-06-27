@@ -10,6 +10,7 @@ exports.postAppointments = function(req, res) {
     appointment.start = req.body.start;
     appointment.end = req.body.end;
     appointment.state = req.body.state;
+    appointment.userId = req.user._id;
 
     // Save the appointment and check for errors
     appointment.save(function(err) {
@@ -27,7 +28,9 @@ exports.postAppointments = function(req, res) {
 // Create endpoint /api/appointments for GET
 exports.getAppointments = function(req, res) {
     // Use the Appointment model to find all appointments
-    Appointment.find(function(err, appointments) {
+    Appointment.find({
+        userId: req.user._id
+    }, function(err, appointments) {
         if (err)
             res.send(err);
 
@@ -39,7 +42,10 @@ exports.getAppointments = function(req, res) {
 // Create endpoint /api/appointments/:id for GET
 exports.getAppointment = function(req, res) {
     // Use the Appointment model to find a specific appointment
-    Appointment.findById(req.params.id, function(err, appointment) {
+    Appointment.find({
+        userId: req.user._id,
+        _id: req.params.id
+    }, function(err, appointment) {
         if (err)
             res.send(err);
         res.json(appointment);
@@ -49,27 +55,31 @@ exports.getAppointment = function(req, res) {
 
 // Create endpoint /api/appointments/:id for PUT
 exports.putAppointment = function(req, res) {
-    // Use the Appointment model to find a specific appointment
-    Appointment.findById(req.params.id, function(err, appointment) {
+    // Use the Beer model to find a specific beer
+    Appointment.update({
+        userId: req.user._id,
+        _id: req.params.id
+    }, {
+        title: req.body.title,
+        state: req.body.state,
+        start: req.body.start,
+        end: req.body.end
+    }, function(err, num, raw) {
         if (err)
             res.send(err);
 
-        // Update the existing appointment state
-        appointment.state = req.body.state;
-
-        // Save the appointment and check for errors
-        appointment.save(function(err) {
-            if (err)
-                res.send(err);
-
-            res.json(appointment);
+        res.json({
+            message: num + ' updated'
         });
     });
 };
 
 exports.deleteAppointment = function(req, res) {
     // Use the Appointment model to find a specific appointment and remove it
-    Appointment.findByIdAndRemove(req.params.id, function(err) {
+    Appointment.remove({
+        userId: req.user._id,
+        _id: req.params.id
+    }, function(err) {
         if (err)
             res.send(err);
 
