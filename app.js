@@ -1,6 +1,6 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+//var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -36,15 +36,14 @@ app.use(session({
 
 app.use(passport.initialize());
 
-
-// Create our Express router
-var router = express.Router();
-
 var authController = require('./controllers/auth');
 var appointmentController = require('./controllers/appointment');
 var userController = require('./controllers/user');
 var clientController = require('./controllers/client');
 var oauth2Controller = require('./controllers/oauth2');
+
+// Create our Express router
+var router = express.Router();
 
 router.route('/appointments')
     .post(authController.isAuthenticated, appointmentController.postAppointments)
@@ -65,8 +64,8 @@ router.route('/clients')
 
 // Create endpoint handlers for oauth2 authorize
 router.route('/oauth2/authorize')
-    .get(authController.isAuthenticated, oauth2Controller.authorization)
-    .post(authController.isAuthenticated, oauth2Controller.decision);
+    .get(authController.isAuthenticated, oauth2Controller.authorization) // TODO login template with localStrategy
+.post(authController.isAuthenticated, oauth2Controller.decision);
 
 // Create endpoint handlers for oauth2 token
 router.route('/oauth2/token')
@@ -74,7 +73,6 @@ router.route('/oauth2/token')
 
 
 app.use('/api', router);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

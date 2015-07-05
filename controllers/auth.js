@@ -6,7 +6,7 @@ var Token = require('../models/token');
 var User = require('../models/user');
 var Client = require('../models/client');
 
-passport.use(new BasicStrategy(
+passport.use('basic', new BasicStrategy(
     function(username, password, callback) {
         User.findOne({
             username: username
@@ -38,10 +38,7 @@ passport.use(new BasicStrategy(
     }
 ));
 
-passport.use(new LocalStrategy({
-        usernameField: 'email',
-        passwordField: 'pass'
-    },
+passport.use('local', new LocalStrategy(
     function(username, password, callback) {
         User.findOne({
             username: username
@@ -69,6 +66,7 @@ passport.use(new LocalStrategy({
                 // Success
                 return callback(null, user);
             });
+
         });
     }
 ));
@@ -95,7 +93,7 @@ passport.use('client-basic', new BasicStrategy(
 ));
 
 
-passport.use(new BearerStrategy(
+passport.use('bearer', new BearerStrategy(
     function(accessToken, callback) {
         Token.findOne({
             value: accessToken
@@ -135,11 +133,10 @@ exports.isBearerAuthenticated = passport.authenticate('bearer', {
     session: false
 });
 
-
 exports.isClientAuthenticated = passport.authenticate('client-basic', {
     session: false
 });
 
-exports.isAuthenticated = passport.authenticate(['local', 'bearer'], {
+exports.isAuthenticated = passport.authenticate(['basic', 'bearer'], {
     session: false
 });
