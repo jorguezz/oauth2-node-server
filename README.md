@@ -13,7 +13,9 @@
 * [Local Authentication](#local-auth)
 * [Bearer Authentication](#bearer-auth)
 * [Authenticate an application client](#auth-client)
-
+* [Bearer Authentication](#bearer-auth)
+* [Exchange authorization code for accesstoken](#code-accesstoken)
+* [RefreshToken](#refresh-token)
 
 ## Quickstart
 [[Back To Top]](#jump-to-section)
@@ -74,4 +76,10 @@
 [[Back To Top]](#jump-to-section)
 
 ## Authenticate an application client
+[[Back To Top]](#jump-to-section)
+
+## Exchange authorization code for accesstoken
+[[Back To Top]](#jump-to-section)
+
+## RefreshToken
 [[Back To Top]](#jump-to-section)
