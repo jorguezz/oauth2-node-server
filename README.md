@@ -17,12 +17,16 @@
 * [Exchange authorization code for accesstoken](#code-accesstoken)
 * [RefreshToken](#refresh-token)
 
+### Attention! 
+> On production always use HTTPS
+
 ## Quickstart
 [[Back To Top]](#jump-to-section)
 
 > OAuth2-node-server is very easy to install and configure.
 
 * [Install dependencies](https://www.npmjs.com/): `npm install`
+* [Mongod is requied](https://www.mongodb.org/):  `mongod`
 
 ## What's included
 [[Back To Top]](#jump-to-section)
