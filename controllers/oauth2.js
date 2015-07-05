@@ -72,15 +72,15 @@ server.exchange(oauth2orize.exchange.password(function(client, username, passwor
             }
 
             RefreshToken.remove({
-                userId: user.userId,
-                clientId: client.clientId
+                userId: user._id,
+                clientId: client._id
             }, function(err) {
                 if (err) return done(err);
             });
 
             AccessToken.remove({
-                userId: user.userId,
-                clientId: client.clientId
+                userId: user._id,
+                clientId: client._id
             }, function(err) {
                 if (err) return done(err);
             });
@@ -90,14 +90,14 @@ server.exchange(oauth2orize.exchange.password(function(client, username, passwor
 
             var token = new AccessToken({
                 token: tokenValue,
-                clientId: client.clientId,
-                userId: user.userId
+                clientId: client._id,
+                userId: user._id
             });
 
             var refreshToken = new RefreshToken({
                 token: refreshTokenValue,
-                clientId: client.clientId,
-                userId: user.userId
+                clientId: client._id,
+                userId: user._id
             });
 
             refreshToken.save(function(err) {
