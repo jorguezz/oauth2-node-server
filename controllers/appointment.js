@@ -1,3 +1,4 @@
+// Example API 
 var Appointment = require('../models/appointment');
 
 // Create endpoint /api/appointments for POSTS
@@ -55,7 +56,7 @@ exports.getAppointment = function(req, res) {
 
 // Create endpoint /api/appointments/:id for PUT
 exports.putAppointment = function(req, res) {
-    // Use the Beer model to find a specific beer
+    // Use the Appointment model to find a specific beer
     Appointment.update({
         userId: req.user._id,
         _id: req.params.id

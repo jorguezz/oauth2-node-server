@@ -1,6 +1,6 @@
 // Load required packages
 var Client = require('../models/client');
-var uuid = require('node-uuid');
+var crypto = require('crypto');
 
 // Create endpoint /api/client for POST
 exports.postClients = function(req, res) {
@@ -9,8 +9,8 @@ exports.postClients = function(req, res) {
 
     // Set the client properties that came from the POST data
     client.name = req.body.name;
-    client.id = uuid.v1();
-    client.secret = uuid.v4();
+    client.id = crypto.randomBytes(16).toString('hex');
+    client.secret = crypto.randomBytes(32).toString('hex');
     client.userId = req.user._id;
 
     // Save the client and check for errors

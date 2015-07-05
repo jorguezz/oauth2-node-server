@@ -1,0 +1,9 @@
+{
+    "db": {
+        "uri": "mongodb://localhost:27017/dbmyapp"
+    },
+    "security": {
+        "salt": "thisismytestsalt01234567890",
+        "tokenLife": 3600
+    }
+}

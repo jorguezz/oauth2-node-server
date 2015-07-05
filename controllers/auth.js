@@ -2,9 +2,11 @@ var passport = require('passport');
 var BearerStrategy = require('passport-http-bearer').Strategy
 var BasicStrategy = require('passport-http').BasicStrategy;
 var LocalStrategy = require('passport-local').Strategy;
-var Token = require('../models/token');
+var AccessToken = require('../models/access_token');
 var User = require('../models/user');
 var Client = require('../models/client');
+
+var config = require('../config/config');
 
 passport.use('basic', new BasicStrategy(
     function(username, password, callback) {
@@ -95,8 +97,8 @@ passport.use('client-basic', new BasicStrategy(
 
 passport.use('bearer', new BearerStrategy(
     function(accessToken, callback) {
-        Token.findOne({
-            value: accessToken
+        AccessToken.findOne({
+            token: accessToken
         }, function(err, token) {
             if (err) {
                 return callback(err);
@@ -105,6 +107,17 @@ passport.use('bearer', new BearerStrategy(
             // No token found
             if (!token) {
                 return callback(null, false);
+            }
+
+            if (Math.round((Date.now() - token.created) / 1000) > config.security.tokenLife) {
+                AccessToken.remove({
+                    token: accessToken
+                }, function(err) {
+                    if (err) return callback(err);
+                });
+                return callback(null, false, {
+                    message: 'AccessToken expired'
+                });
             }
 
             User.findOne({

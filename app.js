@@ -7,8 +7,9 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var session = require('express-session');
+var config = require('./config/config');
 
-mongoose.connect('mongodb://localhost:27017/dbmyapp');
+mongoose.connect(config.db.uri);
 
 var app = express();
 
@@ -29,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Use express session support since OAuth2orize requires it
 app.use(session({
-    secret: 'my-secret-key',
+    secret: config.security.salt,
     saveUninitialized: true,
     resave: true
 }));

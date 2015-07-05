@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 // Define our token schema
-var TokenSchema = new mongoose.Schema({
-    value: {
+var AccessTokenSchema = new mongoose.Schema({
+    token: {
         type: String,
         required: true
     },
@@ -13,7 +13,11 @@ var TokenSchema = new mongoose.Schema({
     clientId: {
         type: String,
         required: true
+    },
+    created: {
+        type: Date,
+        default: Date.now
     }
 });
 
-module.exports = mongoose.model('Token', TokenSchema);
+module.exports = mongoose.model('AccessToken', AccessTokenSchema);
