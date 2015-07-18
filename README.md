@@ -167,7 +167,7 @@ exports.getAppointment = function(req, res) {
 
 // Create endpoint /api/appointments/:id for PUT
 exports.putAppointment = function(req, res) {
-    // Use the Appointment model to find a specific beer
+    // Use the Appointment model to find a specific appointment
     Appointment.update({
         userId: req.user._id,
         _id: req.params.id
@@ -204,6 +204,12 @@ exports.deleteAppointment = function(req, res) {
 
 ## Passport
 [[Back To Top]](#jump-to-section)
+
+> Simple, unobtrusive authentication for Node.js 
+
+> [Passport](http://passportjs.org/)
+ is authentication middleware for Node.js. Extremely flexible and modular, Passport can be unobtrusively dropped in to any Express-based web application. A comprehensive set of strategies support authentication using a username and password, Facebook, Twitter, and more. 
+
 
 ## oauth2orize
 [[Back To Top]](#jump-to-section)
